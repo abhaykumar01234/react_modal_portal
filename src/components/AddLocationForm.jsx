@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import LabelInput from "./LabelInput";
+import locationdb, { bulkcreate } from "../Module";
 
 const AddLocationForm = ({ toggle }) => {
   const [formData, setFormData] = useState({
@@ -16,6 +17,10 @@ const AddLocationForm = ({ toggle }) => {
     appointmentPool: "",
   });
 
+  let db = locationdb('LocationDB', {
+    location: `++id,locname,address,phone,timezone,facility,appointment`
+  })
+
   const [editMode, setEditMode] = useState(false);
 
   const handleChange = (e) => {
@@ -24,6 +29,19 @@ const AddLocationForm = ({ toggle }) => {
       [e.target.name]: e.target.value,
     });
     setEditMode(true);
+  };
+
+  const handleClick = (e,data) => {
+    let flag = bulkcreate(db.location, {
+        locname: formData.locationNm,
+        address: formData.suiteNo + ' ' + formData.addressLine1 + ' ' + formData.addressLine2 + ' ' + formData.city +
+         ' ' + formData.state + ' ' + formData.zipCode,
+        phone: formData.phoneNo,
+        timezone: formData.timeZone,
+        facility: formData.facilityTimes,
+        appointment: formData.appointmentPool
+    })
+    console.log(flag);  
   };
 
   return (
@@ -159,7 +177,9 @@ const AddLocationForm = ({ toggle }) => {
         >
           Cancel
         </button>
-        <button className="btn formButton primaryBg ml-2 text-white">
+        <button className="btn formButton primaryBg ml-2 text-white"
+          onClick={handleClick}
+        >
           Save
         </button>
       </aside>
