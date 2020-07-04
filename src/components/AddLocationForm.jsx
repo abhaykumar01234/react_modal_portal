@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import LabelInput from "./LabelInput";
-import locationdb, { bulkcreate } from "../Module";
+import locationdb, { bulkcreate, getData } from "../Module";
 
 const AddLocationForm = ({ toggle }) => {
   const [formData, setFormData] = useState({
@@ -31,7 +31,7 @@ const AddLocationForm = ({ toggle }) => {
     setEditMode(true);
   };
 
-  const handleClick = (e,data) => {
+  const handleClick = (e) => {
     let flag = bulkcreate(db.location, {
         locname: formData.locationNm,
         address: formData.suiteNo + ' ' + formData.addressLine1 + ' ' + formData.addressLine2 + ' ' + formData.city +
@@ -41,7 +41,13 @@ const AddLocationForm = ({ toggle }) => {
         facility: formData.facilityTimes,
         appointment: formData.appointmentPool
     })
-    console.log(flag);  
+    console.log(flag);
+    if(flag) {
+      getData(db.location)
+    }
+    else {
+      console.log('Please insert data..');
+    }     
   };
 
   return (

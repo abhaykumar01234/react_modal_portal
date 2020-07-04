@@ -17,6 +17,7 @@ const bulkcreate = (dbtable, data) => {
     return flag
 }
 
+//Empty validation check
 const empty = object => {
     let flag = false
 
@@ -32,36 +33,17 @@ const empty = object => {
 }
 
 //get data from the database
-const getData = (dbtable, fn) => {
-    let index = 0
-    let obj = {}
+const getData = (dbtable) => {
+    //let index = 0
+    //let obj = {}
 
     dbtable.count(count => {
         if(count){
-            dbtable.each(table => {
-                obj = Sortobj(table)     
-                fn(obj,index++)           
+            dbtable.each(table => {    
+                console.log(table);       
             })
         }
-        else {
-            fn(0)
-        }
     })
-}
-
-//sort object
-const Sortobj = sortobj => {
-    let obj = {}
-    obj = {     
-        id: sortobj.id,
-        locname: sortobj.locname,
-        address:sortobj.address,
-        phone:sortobj.phone,
-        timezone:sortobj.timezone,
-        facility:sortobj.facility,
-        appointment:sortobj.appointment
-    }
-    return obj
 }
 
 
