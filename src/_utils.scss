@@ -1,0 +1,24 @@
+$primaryColor: #3f51b5;
+$secondaryColor: #f44336;
+
+.primaryBg {
+  background-color: $primaryColor;
+}
+
+.primaryColor {
+  color: $primaryColor;
+}
+
+.secondaryBg {
+  background-color: $secondaryColor;
+}
+
+.secondayrColor {
+  color: $secondaryColor;
+}
+
+.flexCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -1,26 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.scss";
+import Header from "./components/Header";
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div
+      className="container d-flex flex-column"
+      style={{ minHeight: "100vh" }}
+    >
+      <Header />
+      <section className="flexCenter flex-column flex-grow-1">
+        <img src="/location.png" alt="X" className="logoImg mb-2" />
+        <strong className="mt-2">Kindly Add Your Location First</strong>
+        <small className="text-muted ">
+          There is no location added right now
+        </small>
+      </section>
     </div>
   );
-}
+};
 
 export default App;
