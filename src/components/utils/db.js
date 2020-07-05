@@ -9,26 +9,26 @@ const locationdb = (dbname, table) => {
 };
 
 const bulkcreate = (dbtable, data) => {
-  let flag = empty(data);
-  if (flag) {
-    dbtable.bulkAdd([data]);
-  }
-  return flag;
+  // let flag = empty(data);
+  // if (flag) {
+  //   dbtable.bulkAdd([data]);
+  // }
+  return dbtable.bulkAdd([data]);
 };
 
 //Empty validation check
-const empty = (object) => {
-  let flag = false;
+// const empty = (object) => {
+//   let flag = false;
 
-  for (const value in object) {
-    if (object[value] !== "" && object.hasOwnProperty(value)) {
-      flag = true;
-    } else {
-      flag = false;
-    }
-  }
-  return flag;
-};
+//   for (const value in object) {
+//     if (object[value] !== "" && object.hasOwnProperty(value)) {
+//       flag = true;
+//     } else {
+//       flag = false;
+//     }
+//   }
+//   return flag;
+// };
 
 //get data from the database
 const getData = (dbtable) => {
@@ -37,9 +37,7 @@ const getData = (dbtable) => {
 
   dbtable.count((count) => {
     if (count) {
-      dbtable.each((table) => {
-        console.log(table);
-      });
+      return dbtable.each((table) => table);
     }
   });
 };

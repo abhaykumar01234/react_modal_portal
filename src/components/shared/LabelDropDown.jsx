@@ -14,7 +14,7 @@ const LabelDropDown = ({
   refreshErrors,
   ...restProps
 }) => {
-  console.log("rendering dd", dropdownNm);
+  // console.log("rendering dd", dropdownNm);
   const [dropDownOpen, setDropDownOpen] = useState(false);
   const toggleDropDown = () => setDropDownOpen((m) => !m);
 
@@ -38,7 +38,7 @@ const LabelDropDown = ({
       className={`d-flex flex-column flex-column-reverse mb-3 formDropdown ${className}`}
       {...restProps}
     >
-      <aside className="text-danger">&nbsp;</aside>
+      <aside className="text-danger small">&nbsp;</aside>
       <article
         className="d-flex align-items-center formInput"
         name={dropdownNm}
@@ -71,7 +71,7 @@ const LabelDropDown = ({
 
 function arePropsEqual(prevProp, nextProp) {
   return (
-    prevProp.value === nextProp.value && prevProp.onChange === nextProp.onChange
+    prevProp.title === nextProp.title && prevProp.onSelect === nextProp.onSelect
   );
 }
 

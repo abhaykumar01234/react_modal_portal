@@ -45,7 +45,7 @@ export const useForm = (callback, initialState = {}, validateKeys) => {
 
     if (Object.keys(errObj).length === 0) {
       callback();
-      setValues(initialState); //if not redirected
+      // setValues(initialState); //if not redirected
       setErrors({});
     } else {
       setErrors(errObj);

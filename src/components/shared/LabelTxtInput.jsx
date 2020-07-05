@@ -67,7 +67,7 @@ const LabelTxtInput = ({
     <section
       className={`d-flex flex-column flex-column-reverse mb-3 px-0 ${className}`}
     >
-      <aside className="text-danger">{!!error ? error : ""}&nbsp;</aside>
+      <aside className="text-danger small">{!!error ? error : ""}&nbsp;</aside>
       <input
         className="formInput"
         type="text"
@@ -95,7 +95,9 @@ const LabelTxtInput = ({
 // !shouldComponentUpdate
 function arePropsEqual(prevProp, nextProp) {
   return (
-    prevProp.value === nextProp.value && prevProp.onChange === nextProp.onChange
+    prevProp.value === nextProp.value &&
+    prevProp.onChange === nextProp.onChange &&
+    prevProp.error === nextProp.error
   );
 }
 

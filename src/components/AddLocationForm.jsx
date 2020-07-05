@@ -2,7 +2,7 @@ import React from "react";
 import LabelTxtInput from "./shared/LabelTxtInput";
 import LabelDropDown from "./shared/LabelDropDown";
 import { useForm } from "./utils/hooks";
-import locationdb, { bulkcreate, getData } from "./utils/db";
+import locationdb, { bulkcreate } from "./utils/db";
 import timezones from "./utils/data/timezones.json";
 import states from "./utils/data/states.json";
 
@@ -55,20 +55,20 @@ const AddLocationForm = ({ toggle }) => {
     appointmentPool,
   } = values;
 
-  const handleSubmitFromForm = () => {
-    let flag = bulkcreate(db.location, {
-      locname: locationNm,
-      address: `${suiteNo} ${addressLine1} ${addressLine2} ${city} ${state} ${zipCode}`,
-      phone: phoneNo,
-      timezone: timeZone,
-      facility: facilityTimes,
-      appointment: appointmentPool,
-    });
-    console.log(flag);
-    if (flag) {
-      getData(db.location);
-    } else {
-      console.log("Please insert data..");
+  const handleSubmitFromForm = async () => {
+    try {
+      await bulkcreate(db.location, {
+        locname: locationNm,
+        address: `${suiteNo} ${addressLine1} ${addressLine2} ${city} ${state} ${zipCode}`,
+        phone: phoneNo,
+        timezone: timeZone,
+        facility: facilityTimes,
+        appointment: appointmentPool,
+      });
+      alert("Data Saved Successfully");
+      toggle();
+    } catch (err) {
+      alert("Some error occured");
     }
   };
 
@@ -172,7 +172,7 @@ const AddLocationForm = ({ toggle }) => {
             size={3}
           />
           {/* line 3 */}
-          <article className="d-flex">
+          <article className="d-flex align-items-end">
             <LabelTxtInput
               lblTxt={"City"}
               inputNm={"city"}
