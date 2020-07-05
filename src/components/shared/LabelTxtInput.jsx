@@ -1,6 +1,6 @@
 import React from "react";
 
-const LabelInput = ({
+const LabelTxtInput = ({
   lblTxt,
   inputNm,
   className = "",
@@ -10,9 +10,18 @@ const LabelInput = ({
   refreshErrors,
   regexClass = /^[A-Za-z0-9\s]$/,
   size,
+  mask = "",
+  formatChars = {},
   ...restProps
 }) => {
   // console.log("rendering labelInput", inputNm);
+
+  const formats = {
+    "9": "[0-9]",
+    a: "[A-Za-z]",
+    "*": "[A-Za-z0-9]",
+    ...formatChars,
+  };
 
   const handleBlur = () => {
     refreshErrors(inputNm);
@@ -21,8 +30,18 @@ const LabelInput = ({
   const handleKeyPress = (e) => {
     let key = e.keyCode || e.which;
     key = String.fromCharCode(key);
-    // 32:space, 9:tab, 8:backspace, 46:delete, 16:shift 17:ctrl 18:alt
-    if (
+
+    if (!!mask && mask.length >= value.length) {
+      if (
+        key !== mask[value.length] &&
+        (!formats[mask[value.length]] ||
+          !new RegExp(formats[mask[value.length]]).test(key))
+      ) {
+        e.returnValue = false;
+        if (e.preventDefault) e.preventDefault();
+      }
+    } else if (
+      // 32:space, 9:tab, 8:backspace, 46:delete, 16:shift 17:ctrl 18:alt
       // ![32, 9, 8, 17, 18, 46].includes(e.which) &&
       // [16].includes(e.which) &&
       !regexClass.test(key) ||
@@ -30,6 +49,17 @@ const LabelInput = ({
     ) {
       e.returnValue = false;
       if (e.preventDefault) e.preventDefault();
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    let key = e.keyCode || e.which;
+    if (!!mask) {
+      // disable arrow keys when mask is on
+      if (key >= 37 && key <= 40) {
+        e.returnValue = false;
+        if (e.preventDefault) e.preventDefault();
+      }
     }
   };
 
@@ -50,6 +80,7 @@ const LabelInput = ({
         onChange={onChange}
         onBlur={handleBlur}
         onKeyPress={handleKeyPress}
+        onKeyDown={handleKeyDown}
         {...restProps}
       />
       <label htmlFor={inputNm} className="formLabel d-block">
@@ -68,4 +99,4 @@ function arePropsEqual(prevProp, nextProp) {
   );
 }
 
-export default React.memo(LabelInput, arePropsEqual);
+export default React.memo(LabelTxtInput, arePropsEqual);

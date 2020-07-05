@@ -1,7 +1,10 @@
 import React from "react";
-import LabelInput from "./LabelInput";
+import LabelTxtInput from "./shared/LabelTxtInput";
+import LabelDropDown from "./shared/LabelDropDown";
 import { useForm } from "./utils/hooks";
 import locationdb, { bulkcreate, getData } from "./utils/db";
+import timezones from "./utils/data/timezones.json";
+import states from "./utils/data/states.json";
 
 const AddLocationForm = ({ toggle }) => {
   let db = locationdb("LocationDB", {
@@ -13,6 +16,7 @@ const AddLocationForm = ({ toggle }) => {
       [values.locationNm.length === 0, "*Location Is Required Field"],
     ],
     zipCode: [[values.zipCode.length < 5, "5-10 characters only"]],
+    phoneNo: [[values.phoneNo.length < 13, "Enter Valid Phone No"]],
   });
 
   const handleSubmit = () => {
@@ -73,7 +77,7 @@ const AddLocationForm = ({ toggle }) => {
       <h6 className="text-secondary mb-4">Add Locations</h6>
       {/* line 1 */}
       <article className="d-flex">
-        <LabelInput
+        <LabelTxtInput
           lblTxt={"Location Name"}
           inputNm={"locationNm"}
           className="flex-fill"
@@ -81,12 +85,14 @@ const AddLocationForm = ({ toggle }) => {
           error={errors.locationNm}
           onChange={onChange}
           refreshErrors={refreshErrors}
+          size={40}
+          style={{ textTransform: "capitalize" }}
         />
       </article>
       <article className="d-flex">
         <div className="d-flex flex-column" style={{ flex: 1 }}>
           {/* line 2 */}
-          <LabelInput
+          <LabelTxtInput
             lblTxt={"Address Line 1"}
             inputNm={"addressLine1"}
             className="flex-fill"
@@ -94,9 +100,11 @@ const AddLocationForm = ({ toggle }) => {
             error={errors.addressLine1}
             onChange={onChange}
             refreshErrors={refreshErrors}
+            size={37}
+            style={{ textTransform: "uppercase" }}
           />
           {/* line 3 */}
-          <LabelInput
+          <LabelTxtInput
             lblTxt={"Address Line 2"}
             inputNm={"addressLine2"}
             className="flex-fill"
@@ -104,10 +112,12 @@ const AddLocationForm = ({ toggle }) => {
             error={errors.addressLine2}
             onChange={onChange}
             refreshErrors={refreshErrors}
+            size={37}
+            style={{ textTransform: "uppercase" }}
           />
           {/* line 4 */}
           <article className="d-flex">
-            <LabelInput
+            <LabelTxtInput
               lblTxt={"Zip Code"}
               inputNm={"zipCode"}
               className="flex-fill"
@@ -116,11 +126,12 @@ const AddLocationForm = ({ toggle }) => {
               onChange={onChange}
               refreshErrors={refreshErrors}
               size={10}
+              placeholder="012345"
               style={{ textTransform: "uppercase" }}
               regexClass={/[0-9A-Za-z]/}
             />
             <aside className="px-2"></aside>
-            <LabelInput
+            <LabelTxtInput
               lblTxt={"Phone Number"}
               inputNm={"phoneNo"}
               className="flex-fill"
@@ -129,11 +140,13 @@ const AddLocationForm = ({ toggle }) => {
               onChange={onChange}
               refreshErrors={refreshErrors}
               regexClass={/[0-9-()]/}
-              size={12}
+              mask={`(999)-999-999`}
+              size={13}
+              placeholder="(999)-999-999"
             />
           </article>
           {/* line 5 */}
-          <LabelInput
+          <LabelTxtInput
             lblTxt={"Facility Times"}
             inputNm={"facilityTimes"}
             className="flex-fill"
@@ -146,7 +159,7 @@ const AddLocationForm = ({ toggle }) => {
         <aside className="px-2"></aside>
         <div className="d-flex flex-column" style={{ flex: 1 }}>
           {/* line 2 */}
-          <LabelInput
+          <LabelTxtInput
             lblTxt={"Suite No."}
             inputNm={"suiteNo"}
             className="flex-fill"
@@ -154,41 +167,45 @@ const AddLocationForm = ({ toggle }) => {
             error={errors.suiteNo}
             onChange={onChange}
             refreshErrors={refreshErrors}
+            regexClass={/[0-9]/}
+            placeholder="XXX"
+            size={3}
           />
           {/* line 3 */}
           <article className="d-flex">
-            <LabelInput
+            <LabelTxtInput
               lblTxt={"City"}
               inputNm={"city"}
-              className="flex-fill"
               value={city}
+              className="col-6 pl-0 pr-1"
               error={errors.city}
               onChange={onChange}
               refreshErrors={refreshErrors}
+              size={22}
             />
-            <aside className="px-2"></aside>
-            <LabelInput
+            {/* <aside className="px-2"></aside> */}
+            <LabelDropDown
               lblTxt={"State"}
-              inputNm={"state"}
-              className="flex-fill"
-              value={state}
-              error={errors.state}
-              onChange={onChange}
+              dropdownNm={"state"}
+              className="col-6 pl-1 pr-0"
+              title={state}
+              items={states}
+              onSelect={onChange}
               refreshErrors={refreshErrors}
             />
           </article>
           {/* line 4 */}
-          <LabelInput
+          <LabelDropDown
             lblTxt={"Time Zone"}
-            inputNm={"timeZone"}
             className="flex-fill"
-            value={timeZone}
-            error={errors.timeZone}
-            onChange={onChange}
+            dropdownNm={"timeZone"}
+            title={timeZone}
+            items={timezones}
+            onSelect={onChange}
             refreshErrors={refreshErrors}
           />
           {/* line 5 */}
-          <LabelInput
+          <LabelTxtInput
             lblTxt={"Appointment Pool"}
             inputNm={"appointmentPool"}
             className="flex-fill"

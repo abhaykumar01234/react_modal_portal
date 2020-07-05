@@ -3,7 +3,7 @@ import Modal from "./shared/Modal";
 import AddLocationForm from "./AddLocationForm";
 
 const Header = () => {
-  const [modal, setModal] = useState(false);
+  const [modal, setModal] = useState(true);
   // console.log("rendering header", modal);
 
   return (
