@@ -1,53 +1,71 @@
-import React, { useState } from "react";
+import React from "react";
 import LabelInput from "./LabelInput";
-import locationdb, { bulkcreate, getData } from "../Module";
+import { useForm } from "./utils/hooks";
+import locationdb, { bulkcreate, getData } from "./utils/db";
 
 const AddLocationForm = ({ toggle }) => {
-  const [formData, setFormData] = useState({
-    locationNm: "",
-    addressLine1: "",
-    addressLine2: "",
-    zipCode: "",
-    phoneNo: "",
-    facilityTimes: "",
-    suiteNo: "",
-    city: "",
-    state: "",
-    timeZone: "",
-    appointmentPool: "",
+  let db = locationdb("LocationDB", {
+    location: `++id,locname,address,phone,timezone,facility,appointment`,
   });
 
-  let db = locationdb('LocationDB', {
-    location: `++id,locname,address,phone,timezone,facility,appointment`
-  })
+  const validateKeys = (values) => ({
+    locationNm: [
+      [values.locationNm.length === 0, "*Location Is Required Field"],
+    ],
+    zipCode: [[values.zipCode.length < 5, "5-10 characters only"]],
+  });
 
-  const [editMode, setEditMode] = useState(false);
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-    setEditMode(true);
+  const handleSubmit = () => {
+    handleSubmitFromForm();
   };
 
-  const handleClick = (e) => {
+  const { values, errors, refreshErrors, onChange, onSubmit } = useForm(
+    handleSubmit,
+    {
+      locationNm: "",
+      addressLine1: "",
+      addressLine2: "",
+      zipCode: "",
+      phoneNo: "",
+      facilityTimes: "",
+      suiteNo: "",
+      city: "",
+      state: "",
+      timeZone: "",
+      appointmentPool: "",
+    },
+    validateKeys
+  );
+
+  const {
+    locationNm,
+    addressLine1,
+    addressLine2,
+    zipCode,
+    phoneNo,
+    facilityTimes,
+    suiteNo,
+    city,
+    state,
+    timeZone,
+    appointmentPool,
+  } = values;
+
+  const handleSubmitFromForm = () => {
     let flag = bulkcreate(db.location, {
-        locname: formData.locationNm,
-        address: formData.suiteNo + ' ' + formData.addressLine1 + ' ' + formData.addressLine2 + ' ' + formData.city +
-         ' ' + formData.state + ' ' + formData.zipCode,
-        phone: formData.phoneNo,
-        timezone: formData.timeZone,
-        facility: formData.facilityTimes,
-        appointment: formData.appointmentPool
-    })
+      locname: locationNm,
+      address: `${suiteNo} ${addressLine1} ${addressLine2} ${city} ${state} ${zipCode}`,
+      phone: phoneNo,
+      timezone: timeZone,
+      facility: facilityTimes,
+      appointment: appointmentPool,
+    });
     console.log(flag);
-    if(flag) {
-      getData(db.location)
+    if (flag) {
+      getData(db.location);
+    } else {
+      console.log("Please insert data..");
     }
-    else {
-      console.log('Please insert data..');
-    }     
   };
 
   return (
@@ -59,10 +77,10 @@ const AddLocationForm = ({ toggle }) => {
           lblTxt={"Location Name"}
           inputNm={"locationNm"}
           className="flex-fill"
-          value={formData.locationNm}
-          onChange={handleChange}
-          editMode={editMode}
-          onBlur={() => setEditMode(false)}
+          value={locationNm}
+          error={errors.locationNm}
+          onChange={onChange}
+          refreshErrors={refreshErrors}
         />
       </article>
       <article className="d-flex">
@@ -72,20 +90,20 @@ const AddLocationForm = ({ toggle }) => {
             lblTxt={"Address Line 1"}
             inputNm={"addressLine1"}
             className="flex-fill"
-            value={formData.addressLine1}
-            onChange={handleChange}
-            editMode={editMode}
-            onBlur={() => setEditMode(false)}
+            value={addressLine1}
+            error={errors.addressLine1}
+            onChange={onChange}
+            refreshErrors={refreshErrors}
           />
           {/* line 3 */}
           <LabelInput
             lblTxt={"Address Line 2"}
             inputNm={"addressLine2"}
             className="flex-fill"
-            value={formData.addressLine2}
-            onChange={handleChange}
-            editMode={editMode}
-            onBlur={() => setEditMode(false)}
+            value={addressLine2}
+            error={errors.addressLine2}
+            onChange={onChange}
+            refreshErrors={refreshErrors}
           />
           {/* line 4 */}
           <article className="d-flex">
@@ -93,20 +111,25 @@ const AddLocationForm = ({ toggle }) => {
               lblTxt={"Zip Code"}
               inputNm={"zipCode"}
               className="flex-fill"
-              value={formData.zipCode}
-              onChange={handleChange}
-              editMode={editMode}
-              onBlur={() => setEditMode(false)}
+              value={zipCode}
+              error={errors.zipCode}
+              onChange={onChange}
+              refreshErrors={refreshErrors}
+              size={10}
+              style={{ textTransform: "uppercase" }}
+              regexClass={/[0-9A-Za-z]/}
             />
             <aside className="px-2"></aside>
             <LabelInput
               lblTxt={"Phone Number"}
               inputNm={"phoneNo"}
               className="flex-fill"
-              value={formData.phoneNo}
-              onChange={handleChange}
-              editMode={editMode}
-              onBlur={() => setEditMode(false)}
+              value={phoneNo}
+              error={errors.phoneNo}
+              onChange={onChange}
+              refreshErrors={refreshErrors}
+              regexClass={/[0-9-()]/}
+              size={12}
             />
           </article>
           {/* line 5 */}
@@ -114,10 +137,10 @@ const AddLocationForm = ({ toggle }) => {
             lblTxt={"Facility Times"}
             inputNm={"facilityTimes"}
             className="flex-fill"
-            value={formData.facilityTimes}
-            onChange={handleChange}
-            editMode={editMode}
-            onBlur={() => setEditMode(false)}
+            value={facilityTimes}
+            error={errors.facilityTimes}
+            onChange={onChange}
+            refreshErrors={refreshErrors}
           />
         </div>
         <aside className="px-2"></aside>
@@ -127,10 +150,10 @@ const AddLocationForm = ({ toggle }) => {
             lblTxt={"Suite No."}
             inputNm={"suiteNo"}
             className="flex-fill"
-            value={formData.suiteNo}
-            onChange={handleChange}
-            editMode={editMode}
-            onBlur={() => setEditMode(false)}
+            value={suiteNo}
+            error={errors.suiteNo}
+            onChange={onChange}
+            refreshErrors={refreshErrors}
           />
           {/* line 3 */}
           <article className="d-flex">
@@ -138,20 +161,20 @@ const AddLocationForm = ({ toggle }) => {
               lblTxt={"City"}
               inputNm={"city"}
               className="flex-fill"
-              value={formData.city}
-              onChange={handleChange}
-              editMode={editMode}
-              onBlur={() => setEditMode(false)}
+              value={city}
+              error={errors.city}
+              onChange={onChange}
+              refreshErrors={refreshErrors}
             />
             <aside className="px-2"></aside>
             <LabelInput
               lblTxt={"State"}
               inputNm={"state"}
               className="flex-fill"
-              value={formData.state}
-              onChange={handleChange}
-              editMode={editMode}
-              onBlur={() => setEditMode(false)}
+              value={state}
+              error={errors.state}
+              onChange={onChange}
+              refreshErrors={refreshErrors}
             />
           </article>
           {/* line 4 */}
@@ -159,32 +182,33 @@ const AddLocationForm = ({ toggle }) => {
             lblTxt={"Time Zone"}
             inputNm={"timeZone"}
             className="flex-fill"
-            value={formData.timeZone}
-            onChange={handleChange}
-            editMode={editMode}
-            onBlur={() => setEditMode(false)}
+            value={timeZone}
+            error={errors.timeZone}
+            onChange={onChange}
+            refreshErrors={refreshErrors}
           />
           {/* line 5 */}
           <LabelInput
             lblTxt={"Appointment Pool"}
             inputNm={"appointmentPool"}
             className="flex-fill"
-            value={formData.appointmentPool}
-            onChange={handleChange}
-            editMode={editMode}
-            onBlur={() => setEditMode(false)}
+            value={appointmentPool}
+            error={errors.appointmentPool}
+            onChange={onChange}
+            refreshErrors={refreshErrors}
           />
         </div>
       </article>
       <aside className="d-flex justify-content-end">
         <button
-          className="btn formButton secondaryBg text-white"
+          className="btn formButton secondaryBg text-white px-4"
           onClick={toggle}
         >
           Cancel
         </button>
-        <button className="btn formButton primaryBg ml-2 text-white"
-          onClick={handleClick}
+        <button
+          className="btn formButton primaryBg ml-2 text-white px-4"
+          onClick={onSubmit}
         >
           Save
         </button>
