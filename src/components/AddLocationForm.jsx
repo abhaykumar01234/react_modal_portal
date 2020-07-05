@@ -7,9 +7,7 @@ import timezones from "./utils/data/timezones.json";
 import states from "./utils/data/states.json";
 
 const AddLocationForm = ({ toggle }) => {
-  let db = locationdb("LocationDB", {
-    location: `++id,locname,address,phone,timezone,facility,appointment`,
-  });
+  let db = locationdb("LocationDB");
 
   const validateKeys = (values) => ({
     locationNm: [
@@ -59,7 +57,12 @@ const AddLocationForm = ({ toggle }) => {
     try {
       await bulkcreate(db.location, {
         locname: locationNm,
-        address: `${suiteNo} ${addressLine1} ${addressLine2} ${city} ${state} ${zipCode}`,
+        suite: suiteNo,
+        address1: addressLine1,
+        address2: addressLine2,
+        city: city,
+        state: state,
+        zip: zipCode,
         phone: phoneNo,
         timezone: timeZone,
         facility: facilityTimes,

@@ -2,7 +2,9 @@ import Dexie from "dexie";
 
 const locationdb = (dbname, table) => {
   const db = new Dexie(dbname);
-  db.version(1).stores(table);
+  db.version(1).stores({
+    location: `++id,locname,address1,address2,suite,city,state,zip,phone,timezone,facility,appointment`,
+  });
   db.open();
 
   return db;
@@ -32,9 +34,6 @@ const bulkcreate = (dbtable, data) => {
 
 //get data from the database
 const getData = (dbtable) => {
-  //let index = 0
-  //let obj = {}
-
   dbtable.count((count) => {
     if (count) {
       return dbtable.each((table) => table);
@@ -42,5 +41,9 @@ const getData = (dbtable) => {
   });
 };
 
+const dataDelete = (dbtable,id) => {
+  return dbtable.bulkDelete(id)
+}
+
 export default locationdb;
-export { bulkcreate, getData };
+export { bulkcreate, getData, dataDelete };

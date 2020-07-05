@@ -10,9 +10,7 @@ const Header = () => {
   const [locations, setLocations] = useState([]);
 
   const dbRef = useRef(
-    locationdb("LocationDB", {
-      location: `++id,locname,address,phone,timezone,facility,appointment`,
-    })
+    locationdb("LocationDB")
   );
 
   useEffect(() => {
