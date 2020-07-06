@@ -51,7 +51,7 @@ const AddLocationForm = ({ toggle, initLocation, handleSave }) => {
     timeZone,
     appointmentPool,
   } = values;
-  console.log(values);
+  // console.log(values);
 
   const handleSubmitFromForm = () => {
     handleSave(values);
@@ -72,6 +72,7 @@ const AddLocationForm = ({ toggle, initLocation, handleSave }) => {
           onChange={onChange}
           refreshErrors={refreshErrors}
           size={40}
+          regexClass={/[A-Za-z\s]/}
           style={{ textTransform: "capitalize" }}
         />
       </article>
@@ -169,6 +170,7 @@ const AddLocationForm = ({ toggle, initLocation, handleSave }) => {
               error={errors.city}
               onChange={onChange}
               refreshErrors={refreshErrors}
+              regexClass={/[A-Za-z\s]/}
               size={22}
               style={{ textTransform: "capitalize" }}
             />

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 
 const LabelTxtInput = ({
   lblTxt,
@@ -8,13 +8,15 @@ const LabelTxtInput = ({
   onChange,
   error = "",
   refreshErrors,
-  regexClass = /^[A-Za-z0-9\s]$/,
+  regexClass = /[A-Za-z0-9\s]/,
   size,
   mask = "",
   formatChars = {},
   ...restProps
 }) => {
   // console.log("rendering labelInput", inputNm);
+
+  const pasteRef = useRef(false);
 
   const formats = {
     "9": "[0-9]",
@@ -23,9 +25,36 @@ const LabelTxtInput = ({
     ...formatChars,
   };
 
-  const handleBlur = () => {
-    refreshErrors(inputNm);
-  };
+  useEffect(() => {
+    if (pasteRef.current) {
+      // check this value for mask, size, regex
+      let evt = { target: { name: inputNm } };
+      let newVal = "";
+
+      if (!mask) {
+        for (let key of value) {
+          if (regexClass.test(key)) newVal += key;
+        }
+        if (size) newVal = newVal.slice(0, size);
+      } else {
+        for (let m = 0, i = 0; m < mask.length; i++) {
+          let key = value[i];
+          if (
+            key === mask[m] ||
+            (!!formats[mask[m]] && new RegExp(formats[mask[m]]).test(key))
+          ) {
+            newVal += key;
+            m++;
+          }
+        }
+      }
+
+      evt.target.value = newVal;
+      onChange(evt);
+
+      pasteRef.current = false;
+    }
+  }, [value, regexClass, inputNm, onChange, size, formats, mask]);
 
   const handleKeyPress = (e) => {
     let key = e.keyCode || e.which;
@@ -63,6 +92,14 @@ const LabelTxtInput = ({
     }
   };
 
+  const handleBlur = () => {
+    refreshErrors(inputNm);
+  };
+
+  const handlePaste = (e) => {
+    pasteRef.current = true;
+  };
+
   return (
     <section
       className={`d-flex flex-column flex-column-reverse mb-3 px-0 ${className}`}
@@ -78,6 +115,7 @@ const LabelTxtInput = ({
         autoCapitalize={"none"}
         value={value}
         onChange={onChange}
+        onPaste={handlePaste}
         onBlur={handleBlur}
         onKeyPress={handleKeyPress}
         onKeyDown={handleKeyDown}

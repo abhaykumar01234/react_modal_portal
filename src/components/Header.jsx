@@ -57,7 +57,10 @@ const Header = () => {
         <Modal modal={modal} onClose={() => setModal(false)}>
           <AddLocationForm
             initLocation={editLocation}
-            toggle={() => setModal(false)}
+            toggle={() => {
+              setModal(false);
+              setEditLocation({});
+            }}
             handleSave={handleSave}
           />
         </Modal>

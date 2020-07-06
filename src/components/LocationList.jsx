@@ -3,7 +3,7 @@ import Pagination from "./shared/Pagination";
 
 const LocationList = ({ locations, handleEdit, handleDelete }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [locationPerPage] = useState(1);
+  const [locationPerPage] = useState(10);
 
   const indexOfLastLocation = currentPage * locationPerPage;
   const indexOfFirstLocation = indexOfLastLocation - locationPerPage;
