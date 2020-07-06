@@ -1,17 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import Modal from "./shared/Modal";
 import AddLocationForm from "./AddLocationForm";
-import locationdb from "./utils/db";
+import locationdb, { bulkcreate } from "./utils/db";
 import LocationList from "./LocationList";
 
 const Header = () => {
   const [modal, setModal] = useState(false);
 
   const [locations, setLocations] = useState([]);
+  const [editLocation, setEditLocation] = useState({});
 
-  const dbRef = useRef(
-    locationdb("LocationDB")
-  );
+  const dbRef = useRef(locationdb("LocationDB"));
 
   useEffect(() => {
     const refreshLocations = async () => {
@@ -26,6 +25,25 @@ const Header = () => {
   }, [modal]);
   // console.log("rendering header", modal);
 
+  const handleEdit = (loc) => {
+    setEditLocation(loc);
+    setModal(true);
+  };
+
+  const handleDelete = (loc) => {
+    alert("Location with name : " + loc.locationNm + " will be deleted?");
+  };
+
+  const handleSave = async (loc) => {
+    try {
+      await bulkcreate(dbRef.current.location, loc);
+      alert("Data Saved Successfully");
+    } catch (err) {
+      alert("Some error occured");
+    }
+    setEditLocation({});
+  };
+
   return (
     <>
       <section className="d-flex justify-content-between align-items center py-3">
@@ -37,7 +55,11 @@ const Header = () => {
           <strong>+ Add Location</strong>
         </button>
         <Modal modal={modal} onClose={() => setModal(false)}>
-          <AddLocationForm toggle={() => setModal(false)} />
+          <AddLocationForm
+            initLocation={editLocation}
+            toggle={() => setModal(false)}
+            handleSave={handleSave}
+          />
         </Modal>
       </section>
       {locations.length === 0 ? (
@@ -49,7 +71,12 @@ const Header = () => {
           </small>
         </section>
       ) : (
-        <LocationList locations={locations} db={dbRef.current} />
+        <LocationList
+          locations={locations}
+          db={dbRef.current}
+          handleEdit={handleEdit}
+          handleDelete={handleDelete}
+        />
       )}
     </>
   );

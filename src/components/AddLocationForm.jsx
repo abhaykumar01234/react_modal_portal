@@ -2,13 +2,11 @@ import React from "react";
 import LabelTxtInput from "./shared/LabelTxtInput";
 import LabelDropDown from "./shared/LabelDropDown";
 import { useForm } from "./utils/hooks";
-import locationdb, { bulkcreate } from "./utils/db";
+
 import timezones from "./utils/data/timezones.json";
 import states from "./utils/data/states.json";
 
-const AddLocationForm = ({ toggle }) => {
-  let db = locationdb("LocationDB");
-
+const AddLocationForm = ({ toggle, initLocation, handleSave }) => {
   const validateKeys = (values) => ({
     locationNm: [
       [values.locationNm.length === 0, "*Location Is Required Field"],
@@ -35,6 +33,7 @@ const AddLocationForm = ({ toggle }) => {
       state: "",
       timeZone: "",
       appointmentPool: "",
+      ...initLocation,
     },
     validateKeys
   );
@@ -52,27 +51,11 @@ const AddLocationForm = ({ toggle }) => {
     timeZone,
     appointmentPool,
   } = values;
+  console.log(values);
 
-  const handleSubmitFromForm = async () => {
-    try {
-      await bulkcreate(db.location, {
-        locname: locationNm,
-        suite: suiteNo,
-        address1: addressLine1,
-        address2: addressLine2,
-        city: city,
-        state: state,
-        zip: zipCode,
-        phone: phoneNo,
-        timezone: timeZone,
-        facility: facilityTimes,
-        appointment: appointmentPool,
-      });
-      alert("Data Saved Successfully");
-      toggle();
-    } catch (err) {
-      alert("Some error occured");
-    }
+  const handleSubmitFromForm = () => {
+    handleSave(values);
+    toggle();
   };
 
   return (

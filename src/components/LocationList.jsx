@@ -1,13 +1,9 @@
 import React, { useState } from "react";
 import Pagination from "./shared/Pagination";
 
-const LocationList = ({ locations, db }) => {
+const LocationList = ({ locations, handleEdit, handleDelete }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [locationPerPage] = useState(1);
-
-  const handleDelete = () => {
-    alert("Button Clicked");
-  };
 
   const indexOfLastLocation = currentPage * locationPerPage;
   const indexOfFirstLocation = indexOfLastLocation - locationPerPage;
@@ -44,19 +40,22 @@ const LocationList = ({ locations, db }) => {
           <div style={{ flex: 1 }} className="justify-content-center">
             <div className="locCircle">{loc.id}</div>
           </div>
-          <div style={{ flex: 5 }}>{loc.locname}</div>
+          <div style={{ flex: 5 }}>{loc.locationNm}</div>
           <div style={{ flex: 8 }}>
-            {loc.suite} {loc.address1} {loc.address2} {loc.city} {loc.state}{" "}
-            {loc.zip}
+            {loc.suite} {loc.addressLine1} {loc.addressLine2} {loc.city}{" "}
+            {loc.state} {loc.zipCode}
           </div>
-          <div style={{ flex: 5 }}>{loc.phone}</div>
+          <div style={{ flex: 5 }}>{loc.phoneNo}</div>
           <div style={{ flex: 1 }} className="d-flex justify-content-end">
-            <div className="locCircle mr-2 bg-white text-warning">
+            <div
+              className="locCircle mr-2 bg-white text-warning"
+              onClick={() => handleEdit(loc)}
+            >
               <i className="fa fa-pencil fa-lg"></i>
             </div>
             <div
               className="locCircle bg-white text-danger"
-              onClick={handleDelete}
+              onClick={() => handleDelete(loc)}
             >
               <i className="fa fa-trash fa-lg"></i>
             </div>
