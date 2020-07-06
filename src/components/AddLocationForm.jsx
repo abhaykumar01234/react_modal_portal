@@ -157,6 +157,8 @@ const AddLocationForm = ({ toggle }) => {
             error={errors.facilityTimes}
             onChange={onChange}
             refreshErrors={refreshErrors}
+            regexClass={/[0-9:-\sA-Za-z]/}
+            style={{ textTransform: "uppercase" }}
           />
         </div>
         <aside className="px-2"></aside>
@@ -185,6 +187,7 @@ const AddLocationForm = ({ toggle }) => {
               onChange={onChange}
               refreshErrors={refreshErrors}
               size={22}
+              style={{ textTransform: "capitalize" }}
             />
             {/* <aside className="px-2"></aside> */}
             <LabelDropDown

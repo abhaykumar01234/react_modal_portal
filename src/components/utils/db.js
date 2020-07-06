@@ -1,6 +1,6 @@
 import Dexie from "dexie";
 
-const locationdb = (dbname, table) => {
+const locationdb = (dbname) => {
   const db = new Dexie(dbname);
   db.version(1).stores({
     location: `++id,locname,address1,address2,suite,city,state,zip,phone,timezone,facility,appointment`,
@@ -41,9 +41,9 @@ const getData = (dbtable) => {
   });
 };
 
-const dataDelete = (dbtable,id) => {
-  return dbtable.bulkDelete(id)
-}
+const dataDelete = (dbtable, id) => {
+  return dbtable.bulkDelete(id);
+};
 
 export default locationdb;
 export { bulkcreate, getData, dataDelete };
