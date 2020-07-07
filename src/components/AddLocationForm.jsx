@@ -1,5 +1,6 @@
 import React from "react";
 import LabelTxtInput from "./shared/LabelTxtInput";
+import LabelMaskInput from "./shared/LabelMaskInput";
 import LabelDropDown from "./shared/LabelDropDown";
 import { useForm } from "./utils/hooks";
 
@@ -118,7 +119,7 @@ const AddLocationForm = ({ toggle, initLocation, handleSave }) => {
               regexClass={/[0-9A-Za-z]/}
             />
             <aside className="px-2"></aside>
-            <LabelTxtInput
+            {/* <LabelTxtInput
               lblTxt={"Phone Number"}
               inputNm={"phoneNo"}
               className="flex-fill"
@@ -127,6 +128,18 @@ const AddLocationForm = ({ toggle, initLocation, handleSave }) => {
               onChange={onChange}
               refreshErrors={refreshErrors}
               regexClass={/[0-9-()]/}
+              mask={`(999)-999-999`}
+              size={13}
+              placeholder="(999)-999-999"
+            /> */}
+            <LabelMaskInput
+              lblTxt={"Phone Number"}
+              inputNm={"phoneNo"}
+              className="flex-fill"
+              value={phoneNo}
+              error={errors.phoneNo}
+              onChange={onChange}
+              refreshErrors={refreshErrors}
               mask={`(999)-999-999`}
               size={13}
               placeholder="(999)-999-999"
