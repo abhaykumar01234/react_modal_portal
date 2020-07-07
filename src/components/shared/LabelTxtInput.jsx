@@ -69,13 +69,7 @@ const LabelTxtInput = ({
         e.returnValue = false;
         if (e.preventDefault) e.preventDefault();
       }
-    } else if (
-      // 32:space, 9:tab, 8:backspace, 46:delete, 16:shift 17:ctrl 18:alt
-      // ![32, 9, 8, 17, 18, 46].includes(e.which) &&
-      // [16].includes(e.which) &&
-      !regexClass.test(key) ||
-      (size && value.length >= size)
-    ) {
+    } else if (!regexClass.test(key) || (size && value.length >= size)) {
       e.returnValue = false;
       if (e.preventDefault) e.preventDefault();
     }
